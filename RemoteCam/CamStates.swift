@@ -68,9 +68,9 @@ extension RemoteCamSession {
                 ^{
                     alert?.dismiss(animated: true, completion: nil)
                     if (c.peer.displayName == peer.displayName && self.session.connectedPeers.count == 0) {
-                        mailbox.addOperation {
-                            self.popAndStartScanning()
-                        }
+//                        mailbox.addOperation {
+//                            self.popAndStartScanning()
+//                        }
                     }
                 }
 
@@ -99,7 +99,9 @@ extension RemoteCamSession {
                                                     error: nil))
 
             case let s as RemoteCmd.SendFrame:
-                self.sendCommandOrGoToScanning(peer: [peer], msg: s, mode: .unreliable)
+                if (self.session.connectedPeers.count > 0) {
+                    _ = self.sendMessage(peer: self.session.connectedPeers, msg: s, mode: .unreliable)
+                }
 
             case is RemoteCmd.StartRecordingVideo:
                 ctrl.startRecordingVideo()
@@ -140,7 +142,7 @@ extension RemoteCamSession {
 
             case let c as DisconnectPeer:
                 if c.peer.displayName == peer.displayName && self.session.connectedPeers.count == 0 {
-                    self.popAndStartScanning()
+//                    self.popAndStartScanning()
                 }
 
             case is Disconnect:

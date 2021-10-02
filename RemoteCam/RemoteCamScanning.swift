@@ -18,7 +18,6 @@ extension RemoteCamSession {
             case is OnEnter,
                  is UICmd.BecomeCamera,
                  is UICmd.BecomeMonitor,
-                 is UICmd.ToggleConnect,
                  is UICmd.StartScanning:
                 self.startScanning(lobby: lobby)
                 ^{
@@ -30,6 +29,8 @@ extension RemoteCamSession {
                     lobby.camera.isEnabled = false
                     lobby.instructionLabel.text = lobby.disconnectedInstructionsLabel
                 }
+            case is UICmd.ToggleConnect:
+                self.toggleConnect(lobby: lobby)
             case let w as OnConnectToDevice:
                 self.become(
                     name: self.states.connected,

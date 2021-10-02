@@ -21,6 +21,14 @@ extension RemoteCamSession {
         browserViewController.dismiss(animated: true)
     }
     
+    public func advertiser(_ advertiser: MCNearbyServiceAdvertiser, didReceiveInvitationFromPeer peerID: MCPeerID, withContext context: Data?, invitationHandler: @escaping (Bool, MCSession?) -> Void) {
+        if (self.session == nil) {
+            self.session = MCSession(peer: self.localPeerID)
+            self.session.delegate = self
+        }
+        invitationHandler(true, self.session);
+    }
+    
     public func session(_ session: MCSession, peer peerID: MCPeerID, didChange state: MCSessionState) {
         mailbox.addOperation {
             switch state {

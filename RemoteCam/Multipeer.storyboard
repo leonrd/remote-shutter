@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Cdl-GO-JiS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="Cdl-GO-JiS">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -105,71 +105,10 @@
                     <view key="view" contentMode="scaleToFill" id="dGC-7F-6cb">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6In-cm-wQH" userLabel="changeDevice">
-                                <rect key="frame" x="-20" y="-16" width="110" height="110"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="110" id="3Hu-60-SyI"/>
-                                    <constraint firstAttribute="width" constant="110" id="F7R-ch-Ia3"/>
-                                    <constraint firstAttribute="width" constant="110" id="P32-OI-2y0"/>
-                                    <constraint firstAttribute="width" constant="110" id="gvf-h5-6vb"/>
-                                    <constraint firstAttribute="height" constant="110" id="rl9-8A-ERW"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="15"/>
-                                <state key="normal" image="cameraRoleBtn">
-                                    <color key="titleColor" red="0.19607843459999999" green="0.30980393290000002" blue="0.52156865600000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <state key="selected" image="cameraRoleBtn.png"/>
-                                <state key="highlighted">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="P32-OI-2y0"/>
-                                        <exclude reference="gvf-h5-6vb"/>
-                                        <exclude reference="rl9-8A-ERW"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <action selector="goBackWithSender:" destination="fEZ-Nu-U1S" eventType="touchUpInside" id="oAR-Yl-yAL"/>
-                                </connections>
-                            </button>
-                            <imageView clearsContextBeforeDrawing="NO" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="YDg-O6-vat">
-                                <rect key="frame" x="165" y="17" width="45" height="45"/>
-                                <color key="backgroundColor" red="0.072984814640000006" green="0.13994456829999999" blue="0.2669700384" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="45" id="TKg-dA-r1q"/>
-                                    <constraint firstAttribute="width" constant="45" id="jn3-Mb-J7Z"/>
-                                </constraints>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="top" secondItem="dGC-7F-6cb" secondAttribute="topMargin" constant="124" id="BIX-mf-dMo"/>
-                            <constraint firstItem="YDg-O6-vat" firstAttribute="centerX" secondItem="dGC-7F-6cb" secondAttribute="centerX" id="KPt-cr-SaC"/>
-                            <constraint firstItem="YDg-O6-vat" firstAttribute="top" secondItem="5cr-Vb-2ff" secondAttribute="bottom" constant="17" id="OPi-n3-Syg"/>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="leading" secondItem="dGC-7F-6cb" secondAttribute="leadingMargin" constant="-36" id="Q18-yJ-Sk9"/>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="centerY" secondItem="dGC-7F-6cb" secondAttribute="centerY" id="Uak-Yo-y4J"/>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="top" secondItem="dGC-7F-6cb" secondAttribute="topMargin" constant="-16" id="cxJ-h3-MDf"/>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="leading" secondItem="dGC-7F-6cb" secondAttribute="leadingMargin" constant="203" id="pD9-CX-wjT"/>
-                            <constraint firstItem="6In-cm-wQH" firstAttribute="centerX" secondItem="dGC-7F-6cb" secondAttribute="centerX" id="re5-n2-ygJ"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="BIX-mf-dMo"/>
-                                <exclude reference="Uak-Yo-y4J"/>
-                                <exclude reference="pD9-CX-wjT"/>
-                                <exclude reference="re5-n2-ygJ"/>
-                            </mask>
-                        </variation>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </view>
                     <navigationItem key="navigationItem" id="b3D-gP-F3o"/>
                     <nil key="simulatedTopBarMetrics"/>
-                    <connections>
-                        <outlet property="back" destination="6In-cm-wQH" id="KyT-LB-F8i"/>
-                        <outlet property="recordingView" destination="YDg-O6-vat" id="3LM-Y9-b3a"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kA7-xE-XiK" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -443,7 +382,6 @@
         <image name="RemoteShutterSex" width="225" height="229"/>
         <image name="SwitchCamera" width="227" height="230"/>
         <image name="camera" width="178" height="136"/>
-        <image name="cameraRoleBtn" width="221" height="229"/>
         <image name="cameraRoleBtn.png" width="175" height="148"/>
         <image name="flash" width="76" height="121"/>
         <image name="remoteControlsiPn" width="705" height="339"/>

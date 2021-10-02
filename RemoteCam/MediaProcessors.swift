@@ -26,7 +26,7 @@ func cleanupFileAt(_ url: URL) {
     }
 }
 
-func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
+func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer, scale: CGFloat = 1.0) -> UIImage? {
     if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) {
         CVPixelBufferLockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
         let baseAddress = CVPixelBufferGetBaseAddress(imageBuffer)
@@ -42,8 +42,10 @@ func imageFromSampleBuffer(sampleBuffer: CMSampleBuffer) -> UIImage? {
         CVPixelBufferUnlockBaseAddress(imageBuffer, CVPixelBufferLockFlags(rawValue: 0))
 
         if let quartzImage = quartzImage {
-            let image = UIImage(cgImage: quartzImage)
-            return image
+            let originalImage = UIImage(cgImage: quartzImage)
+            return UIImage(cgImage: originalImage.cgImage!,
+                           scale: originalImage.scale * scale,
+                           orientation: originalImage.imageOrientation)
         }
     }
     return nil

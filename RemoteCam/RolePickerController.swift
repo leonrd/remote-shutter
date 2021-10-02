@@ -28,8 +28,6 @@ public class RolePickerController: UIViewController {
 
     let showRemoteSegue: String = "showRemote"
 
-    let presentPhonePickerSegue: String = "presentPhonePicker"
-
     public struct States {
         let connect = "Connect"
         let disconnect = "Disconnect"
@@ -64,6 +62,7 @@ public class RolePickerController: UIViewController {
         super.viewWillAppear(animated)
         self.navigationController?.isNavigationBarHidden = false
         self.verifyCameraAndCameraRollAccess()
+        self.remoteCamSession ! UICmd.StartScanning(sender: nil)
     }
 
     override public func viewDidDisappear(_ animated: Bool) {
@@ -72,10 +71,6 @@ public class RolePickerController: UIViewController {
             remoteCamSession ! Disconnect(sender: nil)
             remoteCamSession ! Actor.Harakiri(sender: nil)
         }
-    }
-
-    public func showPhonePickerViewController() {
-        self.performSegue(withIdentifier: presentPhonePickerSegue, sender: self)
     }
 
     @IBAction public func becomeMonitor(button: UIButton) {

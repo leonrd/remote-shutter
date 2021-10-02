@@ -92,17 +92,18 @@ extension RemoteCamSession {
                     }
                 }}
 
-            case let picResp as RemoteCmd.TakePicResp:
-                if let imageData = picResp.pic {
-                    savePicture(imageData)
-                    ^{alert?.dismiss(animated: true)}
-                } else if let error = picResp.error {
-                    ^{alert?.dismiss(animated: true) { () in
-                        let error = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
-                        error.simpleOkAction()
-                        error.show(true)
-                    }}
-                }
+            case is RemoteCmd.TakePicResp:
+                ^{alert?.dismiss(animated: true)}
+//                if let imageData = picResp.pic {
+//                    savePicture(imageData)
+//                    ^{alert?.dismiss(animated: true)}
+//                } else if let error = picResp.error {
+//                    ^{alert?.dismiss(animated: true) { () in
+//                        let error = UIAlertController(title: error._domain, message: nil, preferredStyle: .alert)
+//                        error.simpleOkAction()
+//                        error.show(true)
+//                    }}
+//                }
                 self.unbecome()
 
             case is UICmd.UnbecomeMonitor:

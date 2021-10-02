@@ -10,7 +10,7 @@ import Foundation
 import Theater
 import MultipeerConnectivity
 
-public class RemoteCamSession: ViewCtrlActor<RolePickerController>, MCSessionDelegate, MCBrowserViewControllerDelegate {
+public class RemoteCamSession: ViewCtrlActor<RolePickerController>, MCSessionDelegate, MCNearbyServiceAdvertiserDelegate, MCBrowserViewControllerDelegate {
 
     let states = RemoteCamStates()
 
@@ -18,31 +18,31 @@ public class RemoteCamSession: ViewCtrlActor<RolePickerController>, MCSessionDel
 
     let service: String = "RemoteCam"
     
-    let userDefaultsPeerId = "peerID"
+    let userDefaultsLocalPeerId = "localPeerId"
 
-    var peerID: MCPeerID
+    var localPeerID: MCPeerID
 
-    var mcAdvertiserAssistant: MCAdvertiserAssistant!
+    var nearbyAdvertiser: MCNearbyServiceAdvertiser;
     
     var browser: MCBrowserViewController?
     
     public required init(context: ActorSystem, ref: ActorRef) {
-        if let data = UserDefaults.standard.data(forKey: userDefaultsPeerId), let id = NSKeyedUnarchiver.unarchiveObject(with: data) as? MCPeerID {
-              self.peerID = id
+        if let data = UserDefaults.standard.data(forKey: userDefaultsLocalPeerId), let id = NSKeyedUnarchiver.unarchiveObject(with: data) as? MCPeerID {
+              self.localPeerID = id
             } else {
               let peerID = MCPeerID(displayName: UIDevice.current.name)
               let data = NSKeyedArchiver.archivedData(withRootObject: peerID)
-              UserDefaults.standard.set(data, forKey: userDefaultsPeerId)
-              self.peerID = peerID
+              UserDefaults.standard.set(data, forKey: userDefaultsLocalPeerId)
+              self.localPeerID = peerID
             }
+        self.nearbyAdvertiser = MCNearbyServiceAdvertiser(peer: self.localPeerID, discoveryInfo: nil, serviceType: self.service)
         super.init(context: context, ref: ref)
         mailbox = OperationQueue()
+        self.nearbyAdvertiser.delegate = self;
     }
 
     override public func willStop() {
-        if let adv = self.mcAdvertiserAssistant {
-            adv.stop()
-        }
+        self.nearbyAdvertiser.stopAdvertisingPeer()
         if let session = self.session {
             session.disconnect()
             session.delegate = nil
@@ -71,16 +71,28 @@ public class RemoteCamSession: ViewCtrlActor<RolePickerController>, MCSessionDel
         ^{
             CATransaction.begin()
             CATransaction.setCompletionBlock {
-                self.session = MCSession(peer: self.peerID)
-                self.session.delegate = self
+                self.nearbyAdvertiser.startAdvertisingPeer()
+            }
+            lobby.navigationController?.popToViewController(lobby, animated: true)
+            CATransaction.commit()
+        }
+    }
+    
+    func toggleConnect(lobby: RolePickerController) {
+        assert(Thread.isMainThread == false, "can't be called from the main thread")
+        ^{
+            CATransaction.begin()
+            CATransaction.setCompletionBlock {
+                if self.session == nil {
+                    self.session = MCSession(peer: self.localPeerID)
+                    self.session.delegate = self
+                }
                 self.browser = MCBrowserViewController(serviceType: self.service, session: self.session)
                 if let browser = self.browser {
                     browser.delegate = self;
                     browser.minimumNumberOfPeers = 2
                     browser.maximumNumberOfPeers = 2
                     browser.modalPresentationStyle = UIModalPresentationStyle.formSheet
-                    self.mcAdvertiserAssistant = MCAdvertiserAssistant(serviceType: self.service, discoveryInfo: nil, session: self.session)
-                    self.mcAdvertiserAssistant.start()
                     lobby.present(browser, animated: true, completion: nil)
                 }
             }
@@ -155,7 +167,7 @@ public class RemoteCamSession: ViewCtrlActor<RolePickerController>, MCSessionDel
                                           msg: Actor.Message,
                                           mode: MCSessionSendDataMode = .reliable) {
         assert(Thread.isMainThread == false, "can't be called from the main thread")
-        if (self.sendMessage(peer: self.session.connectedPeers, msg: msg).isFailure()) {
+        if (self.sendMessage(peer: self.session.connectedPeers, msg: msg, mode: mode).isFailure()) {
             self.popToState(name: self.states.scanning)
             ^{
             let alert = UIAlertController(

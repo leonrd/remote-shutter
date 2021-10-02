@@ -21,7 +21,7 @@ let fps = 30
 /**
  We downsample fps to streamFps because it is not possible for phones to keep up with the 30 fps.
  */
-let streamingFPS = 5
+let streamingFPS = 30
 
 /**
   Camera UI
@@ -62,14 +62,10 @@ public class CameraViewController:
     
     // Variable used to downsample the camera preview, please use with care.
     private var frameCounter = 0
-    
-    @IBOutlet weak var back: UIButton!
-    @IBOutlet var recordingView: UIImageView!
 
     override public func viewDidLoad() {
         super.viewDidLoad()
         self.setupCamera()
-        recordingView.image = UIImage.gifImageWithName("recording")
         session ! UICmd.BecomeCamera(sender: nil, ctrl: self)
         configureIdleMode()
     }
@@ -91,13 +87,9 @@ public class CameraViewController:
     }
     
     func configureIdleMode() {
-        recordingView.isHidden = true
-        back.isHidden = false
     }
     
     func configureVideoModeRecording() {
-        recordingView.isHidden = false
-        back.isHidden = true
     }
 
     public override var shouldAutorotate: Bool {
@@ -125,7 +117,7 @@ public class CameraViewController:
         self.captureSession.beginConfiguration()
         captureSession.sessionPreset = .high
         
-        guard let videoDevice = AVCaptureDevice.default(for: AVMediaType.video) else {
+        guard let videoDevice = cameraForPosition(position: .back) else {
             return
         }
 
@@ -134,7 +126,7 @@ public class CameraViewController:
         captureVideoPreviewLayer!.videoGravity = AVLayerVideoGravity.resizeAspect
         captureVideoPreviewLayer!.frame = self.view.frame
 
-        self.view.layer.insertSublayer(captureVideoPreviewLayer!, below: self.back.layer)
+        self.view.layer.addSublayer(captureVideoPreviewLayer!)
 
         do {
             videoDeviceInput = try AVCaptureDeviceInput(device: videoDevice)
@@ -185,7 +177,7 @@ public class CameraViewController:
             captureSession.addInput(newInput)
             self.videoDeviceInput = newInput
             configSessionOutput()
-            setFrameRate(framerate: fps, videoDevice: newDevice!)
+            _ = setFrameRate(framerate: fps, videoDevice: newDevice!)
             do {
                 DispatchQueue.main.async {
                     self.rotateCameraToOrientation(orientation: self.orientation)
@@ -250,7 +242,7 @@ public class CameraViewController:
 
     func cameraForPosition(position: AVCaptureDevice.Position) -> AVCaptureDevice? {
         let videoDevices = AVCaptureDevice.DiscoverySession.init(
-                deviceTypes: [.builtInWideAngleCamera, .builtInDualCamera],
+            	deviceTypes: [.builtInTelephotoCamera, .builtInWideAngleCamera, .builtInDualCamera],
                 mediaType: .video, position: position).devices
         let filtered: [AVCaptureDevice] = videoDevices.filter {
             return $0.position == position
@@ -395,7 +387,7 @@ extension CameraViewController: AVCaptureVideoDataOutputSampleBufferDelegate, AV
             return
         }
         frameCounter = 0
-        if let cgBackedImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer),
+        if let cgBackedImage = imageFromSampleBuffer(sampleBuffer: sampleBuffer, scale: 0.5),
            let imageData = cgBackedImage.jpegData(compressionQuality: 0.1),
            let device = self.videoDeviceInput?.device {
             session ! RemoteCmd.SendFrame(data: imageData,

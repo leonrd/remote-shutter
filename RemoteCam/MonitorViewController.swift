@@ -311,19 +311,14 @@ public class MonitorViewController: UIViewController, UIImagePickerControllerDel
     }
     
     @objc func onSegmentedControlChanged(event: UIEvent) {
-        if InAppPurchasesManager.shared().didUserBuyRemoveiAdsFeatureAndEnableVideo() {
-            var mode = RecordingMode.Photo
-            switch segmentedControl.selectedSegmentIndex {
-            case 0:
-                mode = RecordingMode.Photo
-            default:
-                mode = RecordingMode.Video
-            }
-            session ! UICmd.BecomeMonitor(nil, mode: mode)
-        } else {
-            showSettings(sender: settingsButton)
-            segmentedControl.selectedSegmentIndex = 0
+        var mode = RecordingMode.Photo
+        switch segmentedControl.selectedSegmentIndex {
+        case 0:
+            mode = RecordingMode.Photo
+        default:
+            mode = RecordingMode.Video
         }
+        session ! UICmd.BecomeMonitor(nil, mode: mode)
     }
 
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
