@@ -82,11 +82,6 @@ public class RolePickerController: UIViewController {
         becomeMonitor()
     }
 
-    @IBAction func showSettings(sender: UIButton) {
-        let ctrl = CMConfigurationsViewController()
-        self.navigationController?.pushViewController(ctrl, animated: true)
-    }
-
     public func becomeMonitor() {
         self.performSegue(withIdentifier: showRemoteSegue, sender: self)
     }

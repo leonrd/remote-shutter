@@ -102,7 +102,7 @@ public class MonitorActor: ViewCtrlActor<MonitorViewController> {
 UI for the monitor.
 */
 
-public class MonitorViewController: iAdViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
+public class MonitorViewController: UIViewController, UIImagePickerControllerDelegate & UINavigationControllerDelegate {
 
     let session = RemoteCamSystem.shared.selectActor(actorPath: "RemoteCam/user/RemoteCam Session")!
 
@@ -132,8 +132,6 @@ public class MonitorViewController: iAdViewController, UIImagePickerControllerDe
     @IBOutlet weak var backButton: UIButton!
     
     @IBOutlet weak var flashButton: UIButton!
-    
-    @IBOutlet weak var settingsButton: UIButton!
     
     @IBOutlet weak var toggleCamera: UIButton!
     
@@ -187,7 +185,6 @@ public class MonitorViewController: iAdViewController, UIImagePickerControllerDe
         flashButton.isHidden = false
         flashStatus.isHidden = false
         timerSlider.isEnabled = true
-        settingsButton.isEnabled = true
         segmentedControl.isEnabled = true
         recordingView.isHidden = true
         toggleCamera.isEnabled = true
@@ -203,7 +200,6 @@ public class MonitorViewController: iAdViewController, UIImagePickerControllerDe
         flashButton.isHidden = true
         flashStatus.isHidden = true
         timerSlider.isEnabled = true
-        settingsButton.isEnabled = true
         segmentedControl.isEnabled = true
         recordingView.isHidden = true
         toggleCamera.isEnabled = true
@@ -219,7 +215,6 @@ public class MonitorViewController: iAdViewController, UIImagePickerControllerDe
         flashButton.isHidden = true
         flashStatus.isHidden = true
         timerSlider.isEnabled = false
-        settingsButton.isEnabled = false
         segmentedControl.isEnabled = false
         recordingView.isHidden = false
         toggleCamera.isEnabled = false
@@ -237,11 +232,6 @@ public class MonitorViewController: iAdViewController, UIImagePickerControllerDe
 
     @IBAction func toggleFlash(sender: UIButton) {
         session ! UICmd.ToggleFlash()
-    }
-
-    @IBAction func showSettings(sender: UIButton) {
-        let ctrl = CMConfigurationsViewController()
-        self.navigationController?.pushViewController(ctrl, animated: true)
     }
 
     @IBAction func showGallery(sender: UIButton) {
